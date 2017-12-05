@@ -1,0 +1,39 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.damis.myapplication.ChooseSeat"
+    android:background="#9a9ac1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="Choose your seat: "
+        android:textSize="56px"
+        android:gravity="center"/>
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:layout_marginTop="140dp"
+        android:text="xxxxxxxxxx " />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Go to next page"
+        android:layout_marginTop="340dp"
+        tools:layout_editor_absoluteX="180dp"
+        tools:layout_editor_absoluteY="527dp"
+        android:gravity="center"
+        android:background="#6e6e89"
+        android:textSize="36px"/>
+
+
+
+</RelativeLayout>
