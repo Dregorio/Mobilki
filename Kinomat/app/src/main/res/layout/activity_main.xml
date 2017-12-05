@@ -10,8 +10,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello in Kinomat!"
+        android:text="@string/invitation"
         android:textSize="56px"
         android:gravity="center"/>
+    <Button
+            android:text="@string/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="73dp"
+            android:id="@+id/button2"/>
+    <Button
+            android:text="@string/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="13dp"
+            android:id="@+id/btn_register"/>
 
 </RelativeLayout>
