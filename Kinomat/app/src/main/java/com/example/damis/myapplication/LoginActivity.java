@@ -38,6 +38,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -317,12 +318,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Gson gson = new Gson();
 
             try {
-                Socket socket = new Socket("localhost", 9090);
+                Socket socket = new Socket("10.0.2.2", 9090);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
                 JsonReader reader = new JsonReader(in);
                 JsonWriter writer = new JsonWriter(out);
+
 
                 gson.toJson(data, String.class, writer);
 
@@ -339,13 +341,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 ioe.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
             return false;

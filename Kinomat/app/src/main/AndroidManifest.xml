@@ -2,17 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.damis.myapplication">
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-=======
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
->>>>>>> 2024457db07640d02a2be5dcda146f809abe210c
 
     <application
         android:allowBackup="true"
@@ -31,10 +24,14 @@
         <activity android:name=".BuyTicket" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login1"></activity>
+            android:label="@string/title_activity_login1">
+
+        </activity>
         <activity
             android:name=".SignUpActivity"
-            android:label="@string/title_activity_sign_up"></activity>
+            android:label="@string/title_activity_sign_up">
+
+        </activity>
     </application>
 
 </manifest>
