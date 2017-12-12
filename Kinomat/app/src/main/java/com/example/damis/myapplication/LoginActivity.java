@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -325,31 +326,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 JsonReader reader = new JsonReader(in);
                 JsonWriter writer = new JsonWriter(out);
 
-
                 gson.toJson(data, String.class, writer);
-
+                writer.flush();
                 Boolean isInDb = gson.fromJson(reader, Boolean.class);
 
                 if (isInDb){
-                    return true;
-                }else{
                     Intent intent = new Intent(getApplicationContext(), ChooseSeat.class);
                     startActivity(intent);
+                    finish();
+                }else{
+                    return true;
                 }
 
-            }catch (IOException ioe){
+            }catch (Exception ioe){
+                Log.e("ala", ioe.getMessage(),ioe);
                 ioe.printStackTrace();
             }
 
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-
-            // TODO: register the new account here.
             return false;
         }
 

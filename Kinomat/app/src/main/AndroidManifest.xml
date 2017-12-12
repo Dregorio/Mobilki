@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".BuyTicket" />
+        <activity android:name=".ChooseSeat" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login1">
