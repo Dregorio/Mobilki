@@ -51,6 +51,7 @@ public class Server {
                         String[] data = fromJson.split(":");
 
                         String selectSQL = "SELECT k.email, k.haslo FROM klienci k WHERE k.email = ? AND k.haslo = ?";
+                        String updateSQL = "INSERT INTO `kinomat`.`klienci` (`id_klienta`, `email`, `haslo`, `pesel`, `nazwisko`, `imie`) VALUES ('1', 'emailK', 'passwordK', '1234', 'damian', 'nameK')";
                         if (!conn.isClosed()){
                             preparedStatement = conn.prepareStatement(selectSQL);
                             preparedStatement.setString(1, data[0]);

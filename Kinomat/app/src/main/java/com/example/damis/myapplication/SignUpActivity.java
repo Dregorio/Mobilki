@@ -3,6 +3,7 @@ package com.example.damis.myapplication;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +31,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,9 +83,11 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
         setContentView(R.layout.activity_sign_up);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mNameView = (AutoCompleteTextView) findViewById(R.id.name);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordConfirmView = (EditText) findViewById(R.id.passwordConfirm);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -156,7 +171,9 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
+        String name = mNameView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String passwordConfirm = mPasswordConfirmView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -179,6 +196,12 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             cancel = true;
         }
 
+        if(password != passwordConfirm){
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -187,7 +210,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, name);
             mAuthTask.execute((Void) null);
         }
     }
@@ -300,21 +323,43 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
 
         private final String mEmail;
         private final String mPassword;
+        private final String mName;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, String name) {
             mEmail = email;
             mPassword = password;
+            mName = name;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            String data = mEmail + ':' + mPassword + ':' + mName;
+            Gson gson = new Gson();
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                Socket socket = new Socket("10.0.2.2", 9090);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+                JsonReader reader = new JsonReader(in);
+                JsonWriter writer = new JsonWriter(out);
+
+                gson.toJson(data, String.class, writer);
+                writer.flush();
+                Boolean isInDb = gson.fromJson(reader, Boolean.class);
+
+                if (isInDb){
+                    Intent intent = new Intent(getApplicationContext(), ChooseSeat.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    return true;
+                }Thread.sleep(2000);
+
+            }catch (Exception ioe){
+                Log.e("ala", ioe.getMessage(),ioe);
+                ioe.printStackTrace();
             }
 
             for (String credential : DUMMY_CREDENTIALS) {
