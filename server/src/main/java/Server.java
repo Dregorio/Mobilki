@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Server {
 
@@ -29,7 +30,7 @@ public class Server {
             e.printStackTrace();
         }
         try {
-            listener = new ServerSocket(9090);
+            listener = new ServerSocket(8888);
             gson = new Gson();
 
             while (true) {
@@ -62,6 +63,44 @@ public class Server {
                                 isInDb = true;
 
                             gson.toJson(isInDb, Boolean.class, writer);
+                            writer.flush();
+                            preparedStatement.close();
+
+                            String sql = "SELECT * FROM miejsca LIMIT 1";
+                            stmt = conn.createStatement();
+                            rs = stmt.executeQuery(sql);
+                            ArrayList<Integer> list = new ArrayList<>();
+                            if (rs.next()){
+                               for (int i = 3; i < 53; ++i){
+                                   list.add(rs.getInt(i));
+                               }
+                            }
+                            gson.toJson(list, ArrayList.class, writer);
+                            writer.flush();
+                            rs.close();
+                            stmt.close();
+
+
+
+                            String sql1 = "SELECT filmy.tytul, seanse.data FROM filmy,seanse, klienci, rezerwacje WHERE " +
+                                    "klienci.id_klienta=rezerwacje.id_klienta AND seanse.id_seans=rezerwacje.id_seans " +
+                                    "AND seanse.id_film=filmy.id_film AND klienci.email = ?";
+
+                            preparedStatement = conn.prepareStatement(sql1);
+
+                            preparedStatement.setString(1, data[0]);
+
+                            rs =preparedStatement.executeQuery();
+
+                            ArrayList<String> strings = new ArrayList<>();
+                            if (rs.next()){
+                                strings.add(rs.getString(1));
+                                strings.add(rs.getString(2));
+                            }
+                            rs.close();
+                            preparedStatement.close();
+
+                            gson.toJson(strings, ArrayList.class, writer);
                             writer.flush();
                         }
                     }catch (SQLException sqle){
