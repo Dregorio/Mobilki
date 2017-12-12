@@ -319,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Gson gson = new Gson();
 
             try {
-                Socket socket = new Socket("10.0.2.2", 9090);
+                Socket socket = new Socket("10.0.2.2", 8888);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -330,12 +330,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 writer.flush();
                 Boolean isInDb = gson.fromJson(reader, Boolean.class);
 
+
                 if (isInDb){
-                    Intent intent = new Intent(getApplicationContext(), ChooseSeat.class);
+                    ArrayList<Integer> miejsca = gson.fromJson(reader, ArrayList.class);
+                    ArrayList<String> rezerwacja = gson.fromJson(reader, ArrayList.class);
+
+                    Intent intent = new Intent(getApplicationContext(), ChooseWhatYouWant.class);
+                    intent.putExtra("miejsca", miejsca);
+                    intent.putExtra("rezerwacja", rezerwacja);
                     startActivity(intent);
                     finish();
                 }else{
-                    return true;
+                    return false;
                 }
 
             }catch (Exception ioe){
