@@ -50,7 +50,7 @@ public class Server {
                         fromJson = gson.fromJson(reader, String.class);
                         String[] data = fromJson.split(":");
 
-                        String selectSQL = "SELECT k.login, k.haslo FROM klienci k WHERE k.email = ? AND k.haslo = ?";
+                        String selectSQL = "SELECT k.email, k.haslo FROM klienci k WHERE k.email = ? AND k.haslo = ?";
                         if (!conn.isClosed()){
                             preparedStatement = conn.prepareStatement(selectSQL);
                             preparedStatement.setString(1, data[0]);
@@ -62,6 +62,7 @@ public class Server {
                                 isInDb = true;
 
                             gson.toJson(isInDb, Boolean.class, writer);
+                            writer.flush();
                         }
                     }catch (SQLException sqle){
                         System.out.println("SQLException: " + sqle.getMessage());
